@@ -1,12 +1,6 @@
-# fastify-cjs
+# rinha-backend
 
-Sample boilerplate using fastify with commonjs.
-
-## Requirements
-* Node.js
-    * version: >=16.0.0
-* NPM
-* Git
+PoC para a rinha de backend.
 
 ## Get started
 
@@ -38,44 +32,8 @@ npm t
 
 Base url to API:
 ```
-http://localhost:3000/api
+http://localhost:3000/
 ```
-
-To access the API documentation, you can use the link below:
-
-```
-http://localhost:3000/docs
-```
-
-
-## Production
-
-Starting application in production environment:
-
-```shell
-docker compose -f docker-compose-production.yml up -d
-```
-
-Stopping application in production environment:
-
-```shell
-docker compose -f docker-compose-production.yml down -v
-```
-
-Base url to API:
-```
-http://localhost:8080/api
-```
-
-To access the API documentation, you can use the link below:
-
-```
-http://localhost:8080/docs
-```
-
-## Requests
-
-All the API requests are available into  ```requests``` directory into root path of project.
 
 ## License
 

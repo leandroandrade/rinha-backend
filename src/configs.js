@@ -7,8 +7,8 @@ module.exports = {
   },
   ajv: {
     customOptions: {
-      removeAdditional: true,
-      coerceTypes: 'array',
+      removeAdditional: 'all',
+      coerceTypes: false,
       useDefaults: true,
     },
   },
