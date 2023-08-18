@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test dotenv -e .env.test -- tap --no-coverage",
+    "test": "cross-env NODE_ENV=test dotenv -e .env.test -- tap --jobs 1 --no-coverage",
     "test:coverage": "cross-env NODE_ENV=test dotenv -e .env.test -- tap --coverage",
     "dev": "nodemon",
     "start": "node src/server.js"

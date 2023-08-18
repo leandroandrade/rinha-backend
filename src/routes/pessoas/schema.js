@@ -63,6 +63,18 @@ const fetchPessoas = {
       },
       required: ['t'],
     },
+    response: {
+      200: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          apelido: { type: 'string' },
+          nome: { type: 'string' },
+          nascimento: { type: 'string' },
+          stack: { type: 'array' },
+        },
+      },
+    },
   },
 };
 
