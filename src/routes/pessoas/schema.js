@@ -32,7 +32,10 @@ const postPessoa = {
     },
     response: {
       201: {
-        type: 'null',
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+        },
       },
     },
   },

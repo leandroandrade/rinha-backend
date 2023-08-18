@@ -3,9 +3,17 @@ const { buildApp } = require('../shared/helper');
 
 const { test } = t;
 
-test('should not error when `apelido` is empty', async (t) => {
-  const fastify = await buildApp(t);
+let fastify;
 
+t.beforeEach(async t => {
+  fastify = await buildApp(t);
+});
+
+t.afterEach(async t => {
+  await fastify.mongo.db.collection('pessoas').deleteMany({});
+});
+
+test('should not error when `apelido` is empty', async (t) => {
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -18,6 +26,7 @@ test('should not error when `apelido` is empty', async (t) => {
       // nascimento: '',
     },
   });
+
   t.equal(response.statusCode, 400);
   t.same(response.json(), {
     statusCode: 400,
@@ -28,8 +37,6 @@ test('should not error when `apelido` is empty', async (t) => {
 });
 
 test('should not error when `nome` is empty', async (t) => {
-  const fastify = await buildApp(t);
-
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -52,8 +59,6 @@ test('should not error when `nome` is empty', async (t) => {
 });
 
 test('should not error when `nascimento` is empty', async (t) => {
-  const fastify = await buildApp(t);
-
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -76,8 +81,6 @@ test('should not error when `nascimento` is empty', async (t) => {
 });
 
 test('should not error when `apelido` have fewer than 1 characters', async (t) => {
-  const fastify = await buildApp(t);
-
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -100,8 +103,6 @@ test('should not error when `apelido` have fewer than 1 characters', async (t) =
 });
 
 test('should not error when `nome` have fewer than 1 characters', async (t) => {
-  const fastify = await buildApp(t);
-
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -124,8 +125,6 @@ test('should not error when `nome` have fewer than 1 characters', async (t) => {
 });
 
 test('should not error when `nascimento` not match pattern', async (t) => {
-  const fastify = await buildApp(t);
-
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -138,6 +137,7 @@ test('should not error when `nascimento` not match pattern', async (t) => {
       nascimento: '',
     },
   });
+
   t.equal(response.statusCode, 400);
   t.same(response.json(), {
     statusCode: 400,
@@ -148,8 +148,6 @@ test('should not error when `nascimento` not match pattern', async (t) => {
 });
 
 test('should return successfully', async (t) => {
-  const fastify = await buildApp(t);
-
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -162,12 +160,14 @@ test('should return successfully', async (t) => {
       nascimento: '2023-08-16',
     },
   });
+
   t.equal(response.statusCode, 201);
+
+  const json = response.json();
+  t.equal(response.headers.location, `/pessoas/${json.id}`);
 });
 
 test('should return success send stack values', async (t) => {
-  const fastify = await buildApp(t);
-
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -181,12 +181,13 @@ test('should return success send stack values', async (t) => {
       stack: ['first', 'second'],
     },
   });
+
   t.equal(response.statusCode, 201);
+  const json = response.json();
+  t.equal(response.headers.location, `/pessoas/${json.id}`);
 });
 
 test('should return error when `apelido` have more than 32 characters', async (t) => {
-  const fastify = await buildApp(t);
-
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -209,8 +210,6 @@ test('should return error when `apelido` have more than 32 characters', async (t
 });
 
 test('should return error when `nome` have more than 100 characters', async (t) => {
-  const fastify = await buildApp(t);
-
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -233,8 +232,6 @@ test('should return error when `nome` have more than 100 characters', async (t) 
 });
 
 test('should return error when `stack` not contains only string', async (t) => {
-  const fastify = await buildApp(t);
-
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
