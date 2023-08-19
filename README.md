@@ -2,38 +2,53 @@
 
 PoC para a rinha de backend.
 
+Desafio proposto: https://github.com/zanfranceschi/rinha-de-backend-2023-q3/tree/main
+
 ## Get started
 
-Details to configure local environment:
+Detalhes para configurar o ambiente local:
 
-Installing dependencies:
+Instalando dependências:
 
 ```shell
 npm install
 ```
 
-Configuring .env file
+Configurando .env file
 
 ```shell
 cp .env.example .env
 ```
 
-Starting application like development:
+Iniciando aplicação em desenvolvimento:
 
 ```shell
 npm run dev
-```
-
-Command to run tests:
-
-```shell
-npm t
 ```
 
 Base url to API:
 ```
 http://localhost:3000/
 ```
+
+## Tests
+
+Iniciar containers:
+```shell
+docker compose up -d
+```
+
+Executar testes:
+
+```shell
+npm t
+```
+
+Finalizar containers:
+```shell
+docker compose down -v
+```
+
 
 ## License
 
