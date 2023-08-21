@@ -40,6 +40,7 @@ async function main() {
   }
 
   await collection.insertMany(pessoas);
+  await client.close();
 
   process.exit(0);
 }
