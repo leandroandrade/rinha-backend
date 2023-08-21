@@ -1,0 +1,22 @@
+### post pessoa
+POST http://localhost:3000/pessoas
+Content-Type: application/json
+
+{
+  "apelido": "john",
+  "nome": "John Wick",
+  "nascimento": "1964-09-02",
+  "stack": ["Javascript", "Python", "Go"]
+}
+
+### fetch by id
+GET http://localhost:3000/pessoas/426d9ceb-3b6e-4d5b-a180-31a6739bc12c
+Content-Type: application/json
+
+### count
+GET http://localhost:3000/contagem-pessoas
+Content-Type: application/json
+
+### fetch by t
+GET http://localhost:3000/pessoas?t=wick
+Content-Type: application/json
