@@ -168,6 +168,52 @@ test('should return successfully', async (t) => {
   t.equal(response.headers.location, `/pessoas/${json.id}`);
 });
 
+test('should return error when `apelido` is null', async (t) => {
+  const response = await fastify.inject({
+    method: 'POST',
+    url: '/pessoas',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    payload: {
+      apelido: null,
+      nome: 'John Doe',
+      nascimento: '2023-08-16',
+    },
+  });
+
+  t.equal(response.statusCode, 400);
+  t.same(response.json(), {
+    statusCode: 400,
+    code: 'FST_ERR_VALIDATION',
+    error: 'Bad Request',
+    message: 'body/apelido must be string',
+  });
+});
+
+test('should return error when `nome` is null', async (t) => {
+  const response = await fastify.inject({
+    method: 'POST',
+    url: '/pessoas',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    payload: {
+      apelido: 'john',
+      nome: null,
+      nascimento: '2023-08-16',
+    },
+  });
+
+  t.equal(response.statusCode, 400);
+  t.same(response.json(), {
+    statusCode: 400,
+    code: 'FST_ERR_VALIDATION',
+    error: 'Bad Request',
+    message: 'body/nome must be string',
+  });
+});
+
 test('should return success send stack values', async (t) => {
   const response = await fastify.inject({
     method: 'POST',
