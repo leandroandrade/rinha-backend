@@ -23,7 +23,6 @@ test('should return sample response', async (t) => {
   t.equal(response.statusCode, 400);
   t.same(response.json(), {
     statusCode: 400,
-    code: 'FST_ERR_VALIDATION',
     error: 'Bad Request',
     message: "querystring must have required property 't'",
   });

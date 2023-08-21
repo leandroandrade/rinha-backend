@@ -1,3 +1,5 @@
+const errorSchemas = require('../../error-schemas');
+
 const postPessoa = {
   schema: {
     body: {
@@ -37,6 +39,7 @@ const postPessoa = {
           id: { type: 'string' },
         },
       },
+      ...errorSchemas,
     },
   },
 };
@@ -60,6 +63,7 @@ const fetchPessoaById = {
           stack: { type: 'array' },
         },
       },
+      ...errorSchemas,
     },
   },
 };
@@ -74,6 +78,9 @@ const fetchPessoas = {
         },
       },
       required: ['t'],
+    },
+    response: {
+      ...errorSchemas,
     },
   },
 };

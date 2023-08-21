@@ -25,7 +25,6 @@ test('should error when `id` is not an uuid', async (t) => {
   t.equal(response.statusCode, 400);
   t.same(response.json(), {
     statusCode: 400,
-    code: 'FST_ERR_VALIDATION',
     error: 'Bad Request',
     message: 'params/id must match format "uuid"',
   });
