@@ -7,12 +7,26 @@ class PostController {
 
   async handle(req, reply) {
     const {
-      apelido, nome, nascimento, stack,
+      apelido,
+      nome,
+      nascimento,
+      stack,
     } = req.body;
+
+    const collection = this.fastify.mongo.db.collection('pessoas');
+
+    const exists = await collection.countDocuments({ apelido }) > 0;
+    if (exists) {
+      return reply.status(422)
+        .send({
+          statusCode: 422,
+          error: 'Unprocessable Entity',
+          message: `${apelido} already exists!`,
+        });
+    }
 
     const id = crypto.randomUUID();
 
-    const collection = this.fastify.mongo.db.collection('pessoas');
     await collection.insertOne({
       apelido,
       nome,

@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const t = require('tap');
 const { buildApp } = require('../shared/helper');
 
@@ -251,5 +252,37 @@ test('should return error when `stack` not contains only string', async (t) => {
     code: 'FST_ERR_VALIDATION',
     error: 'Bad Request',
     message: 'body/stack/0 must be string',
+  });
+});
+
+test('should return error when `apelido` already exists', async (t) => {
+  const collection = fastify.mongo.db.collection('pessoas');
+  await collection.insertOne({
+    id: crypto.randomUUID(),
+    apelido: 'dev',
+    nome: 'Dev Random',
+    nascimento: '2023-08-16',
+    stack: ['node', 'postgres'],
+  });
+
+  const response = await fastify.inject({
+    method: 'POST',
+    url: '/pessoas',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    payload: {
+      apelido: 'dev',
+      nome: 'Lorem Ipsum',
+      nascimento: '2023-08-16',
+      stack: ['nodejs', 'mongodb'],
+    },
+  });
+
+  t.equal(response.statusCode, 422);
+  t.same(response.json(), {
+    statusCode: 422,
+    error: 'Unprocessable Entity',
+    message: 'dev already exists!',
   });
 });
