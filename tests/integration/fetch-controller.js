@@ -1,11 +1,20 @@
+const crypto = require('crypto');
 const t = require('tap');
 const { buildApp } = require('../shared/helper');
 
 const { test } = t;
 
-test('should return sample response', async (t) => {
-  const fastify = await buildApp(t);
+let fastify;
 
+t.beforeEach(async t => {
+  fastify = await buildApp(t);
+});
+
+t.afterEach(async t => {
+  await fastify.mongo.db.collection('pessoas').deleteMany({});
+});
+
+test('should return sample response', async (t) => {
   const response = await fastify.inject({
     method: 'GET',
     url: '/pessoas',
@@ -21,7 +30,37 @@ test('should return sample response', async (t) => {
 });
 
 test('should return sample response', async (t) => {
-  const fastify = await buildApp(t);
+  const collection = fastify.mongo.db.collection('pessoas');
+  await collection.insertMany([
+    {
+      id: crypto.randomUUID(),
+      apelido: 'ze',
+      nome: 'José Paulo',
+      nascimento: '2023-08-16',
+      stack: ['node', 'postgres'],
+    },
+    {
+      id: crypto.randomUUID(),
+      apelido: 'node',
+      nome: 'Javascript Man',
+      nascimento: '2023-08-16',
+      stack: ['C++', 'postgres'],
+    },
+    {
+      id: crypto.randomUUID(),
+      apelido: 'dev',
+      nome: 'Node developer',
+      nascimento: '2023-08-16',
+      stack: ['javascript', 'postgres'],
+    },
+    {
+      id: crypto.randomUUID(),
+      apelido: 'john',
+      nome: 'John Doe',
+      nascimento: '2023-08-16',
+      stack: ['python', 'mongodb'],
+    },
+  ]);
 
   const response = await fastify.inject({
     method: 'GET',
@@ -29,4 +68,7 @@ test('should return sample response', async (t) => {
   });
 
   t.equal(response.statusCode, 200);
+
+  const results = response.json();
+  t.equal(results.length, 3);
 });

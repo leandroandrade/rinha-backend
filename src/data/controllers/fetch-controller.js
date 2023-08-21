@@ -4,9 +4,13 @@ class FetchController {
   }
 
   async handle(req, reply) {
-    return reply.send({
-      clazz: 'FetchController',
-    });
+    const { t } = req.query;
+
+    const collection = this.fastify.mongo.db.collection('pessoas');
+    const results = await collection.find({ $text: { $search: t } }, { projection: { _id: 0 } })
+      .toArray();
+
+    return reply.send(results);
   }
 }
 
