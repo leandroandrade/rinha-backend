@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const { MongoClient } = require('mongodb');
 const { faker } = require('@faker-js/faker');
 
-const SEED = 1000;
+const SEED = 500000;
 const TECH = ['Javascript', 'Python', 'Go', 'Java',
   'Kotlin', 'PHP', 'C#', 'Swift', 'R',
   'Ruby', 'C', 'C++', 'Matlab', 'TypeScript',
@@ -27,7 +27,9 @@ async function main() {
   const db = client.db(process.env.MONGODB_DB);
   const collection = db.collection('pessoas');
 
-  const pessoas = [];
+  let pessoas = [];
+
+  console.log('DEBUG: processando...');
 
   for (let i = 0; i < SEED; i++) {
     pessoas.push({
@@ -37,15 +39,25 @@ async function main() {
       nascimento: '2023-08-16',
       stack: getRandomTechList(5),
     });
+
+    if (pessoas.length >= 20) {
+      await collection.insertMany(pessoas);
+      pessoas = [];
+    }
   }
 
-  await collection.insertMany(pessoas);
+  if (pessoas.length) {
+    await collection.insertMany(pessoas);
+  }
   await client.close();
+
+  console.log(`DEBUG: ${SEED} registros inseridos!`);
 
   process.exit(0);
 }
 
-main().catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+main()
+  .catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
