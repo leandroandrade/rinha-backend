@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const { MongoClient } = require('mongodb');
 const { faker } = require('@faker-js/faker');
 
-const SEED = 500000;
+const SEED = 200000;
 const TECH = ['Javascript', 'Python', 'Go', 'Java',
   'Kotlin', 'PHP', 'C#', 'Swift', 'R',
   'Ruby', 'C', 'C++', 'Matlab', 'TypeScript',

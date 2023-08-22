@@ -14,8 +14,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: '1GB'
+          cpus: '0.4'
+          memory: '600MB'
     depends_on:
       - mongodb
     networks:
@@ -34,8 +34,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: '1GB'
+          cpus: '0.4'
+          memory: '600MB'
     depends_on:
       - mongodb
     networks:
@@ -53,7 +53,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.1'
+          cpus: '0.2'
           memory: '300MB'
     networks:
       - support-net
@@ -74,7 +74,7 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: '700MB'
+          memory: '1.5GB'
     networks:
       - support-net
 
