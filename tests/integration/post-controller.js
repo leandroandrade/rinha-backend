@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const t = require('tap');
+const { faker } = require('@faker-js/faker');
 const { buildApp } = require('../shared/helper');
 
 const { test } = t;
@@ -12,6 +13,7 @@ t.beforeEach(async t => {
 
 t.afterEach(async t => {
   await fastify.mongo.db.collection('pessoas').deleteMany({});
+  await fastify.mongo.db.collection('summary').deleteMany({});
 });
 
 test('should not error when `apelido` is empty', async (t) => {
@@ -142,7 +144,7 @@ test('should not error when `nascimento` not match pattern', async (t) => {
   });
 });
 
-test('should return successfully', async (t) => {
+test('should register successfully', async (t) => {
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -160,6 +162,32 @@ test('should return successfully', async (t) => {
 
   const json = response.json();
   t.equal(response.headers.location, `/pessoas/${json.id}`);
+
+  const summary = fastify.mongo.db.collection('summary');
+  const result = await summary.findOne();
+  t.equal(result.total, 1);
+});
+
+test('should register `4` successfully', async (t) => {
+  for (let i = 0; i < 4; i++) {
+    await fastify.inject({
+      method: 'POST',
+      url: '/pessoas',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      payload: {
+        apelido: faker.person.lastName()
+          .toLowerCase(),
+        nome: `${faker.person.firstName()} ${faker.person.lastName()}`,
+        nascimento: '2023-08-16',
+      },
+    });
+  }
+
+  const summary = fastify.mongo.db.collection('summary');
+  const result = await summary.findOne();
+  t.equal(result.total, 4);
 });
 
 test('should return error when `apelido` is null', async (t) => {

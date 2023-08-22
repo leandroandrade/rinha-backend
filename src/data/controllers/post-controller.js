@@ -13,9 +13,10 @@ class PostController {
       stack,
     } = req.body;
 
-    const collection = this.fastify.mongo.db.collection('pessoas');
+    const pessoas = this.fastify.mongo.db.collection('pessoas');
+    const summary = this.fastify.mongo.db.collection('summary');
 
-    const exists = await collection.countDocuments({ apelido }) > 0;
+    const exists = await pessoas.countDocuments({ apelido }) > 0;
     if (exists) {
       return reply.status(422)
         .send({
@@ -27,13 +28,16 @@ class PostController {
 
     const id = crypto.randomUUID();
 
-    await collection.insertOne({
-      apelido,
-      nome,
-      nascimento,
-      stack,
-      id,
-    });
+    await Promise.all([
+      pessoas.insertOne({
+        apelido,
+        nome,
+        nascimento,
+        stack,
+        id,
+      }),
+      summary.updateOne({}, { $inc: { total: 1 } }, { upsert: true }),
+    ]);
 
     return reply
       .status(201)

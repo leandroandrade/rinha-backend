@@ -4,9 +4,11 @@ class ContagemController {
   }
 
   async handle(req, reply) {
-    const collection = this.fastify.mongo.db.collection('pessoas');
+    const collection = this.fastify.mongo.db.collection('summary');
 
-    const total = await collection.countDocuments();
+    const result = await collection.findOne();
+    const total = result?.total || 0;
+
     return reply.send({
       total,
     });
