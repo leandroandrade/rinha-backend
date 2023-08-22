@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   api1:
-    image: leandroandrade/rinha-backend-2023-q3
+    build: .
     container_name: api1
     expose:
       - 8080
@@ -22,7 +22,7 @@ services:
       - support-net
 
   api2:
-    image: leandroandrade/rinha-backend-2023-q3
+    build: .
     container_name: api2
     expose:
       - 8080
@@ -77,7 +77,6 @@ services:
           memory: '700MB'
     networks:
       - support-net
-
 
 networks:
   support-net:

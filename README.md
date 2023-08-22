@@ -49,11 +49,30 @@ Finalizar containers:
 docker compose down -v
 ```
 
-## Subir todo ambiente
+## Imagem Docker
+
+Construir imagem:
+```sh
+docker build -t leandroandrade/rinha-backend-2023-q3 .
+```
+
+## Containers Dev
 
 Iniciar containers:
 ```sh
-docker compose -f docker-compose-production.yml up --build -d
+docker compose -f docker-compose-dev.yml up --build -d
+```
+
+Finalizar containers:
+```sh
+docker compose -f docker-compose-dev.yml down -v
+```
+
+## Containers produção
+
+Iniciar containers:
+```sh
+docker compose -f docker-compose-production.yml up -d
 ```
 
 Finalizar containers:
