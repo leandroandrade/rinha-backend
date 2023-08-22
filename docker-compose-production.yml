@@ -1,16 +1,84 @@
-version: '3'
+version: '3.9'
 
 services:
-  api:
+  api1:
     build: .
-    container_name: fastify-cjs
-    ports:
-      - '8080:8080'
+    container_name: api1
+    expose:
+      - 8080
     environment:
-      NODE_ENV: production
       PORT: 8080
+      MONGODB_URL: 'mongodb://root:root@mongodb:27017/'
+      MONGODB_DB: 'rinha_backend'
+      NODE_ENV: production
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1GB'
+    depends_on:
+      - mongodb
     networks:
       - support-net
+
+  api2:
+    build: .
+    container_name: api2
+    expose:
+      - 8080
+    environment:
+      PORT: 8080
+      MONGODB_URL: 'mongodb://root:root@mongodb:27017/'
+      MONGODB_DB: 'rinha_backend'
+      NODE_ENV: production
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1GB'
+    depends_on:
+      - mongodb
+    networks:
+      - support-net
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./ngnix/ngnix.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api1
+      - api2
+    ports:
+      - '9999:9999'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: '300MB'
+    networks:
+      - support-net
+
+  mongodb:
+    image: arm64v8/mongo:5.0
+    container_name: mongodb
+    hostname: mongodb
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - ./mongodb:/mongodb
+      - ./mongodb/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '700MB'
+    networks:
+      - support-net
+
+
 networks:
   support-net:
     driver: bridge

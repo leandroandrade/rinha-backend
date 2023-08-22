@@ -49,6 +49,18 @@ Finalizar containers:
 docker compose down -v
 ```
 
+## Subir todo ambiente
+
+Iniciar containers:
+```sh
+docker compose -f docker-compose-production.yml up --build -d
+```
+
+Finalizar containers:
+```sh
+docker compose -f docker-compose-production.yml down -v
+```
+
 ## Miscellaneous
 
 Status de execução de query no MongoDB:
