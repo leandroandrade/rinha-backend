@@ -15,11 +15,18 @@ services:
       resources:
         limits:
           cpus: '0.4'
-          memory: '600MB'
+          memory: '960MB'
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
       - support-net
+    healthcheck:
+      test: curl -o /dev/null -fs --retry 0 --head http://localhost:8080/healthcheck || exit 1
+      interval: 10s
+      retries: 3
+      start_period: 5s
+      timeout: 2s
 
   api2:
     image: leandromandrade/rinha-backend-2023-q3
@@ -35,11 +42,18 @@ services:
       resources:
         limits:
           cpus: '0.4'
-          memory: '600MB'
+          memory: '960MB'
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
       - support-net
+    healthcheck:
+      test: curl -o /dev/null -fs --retry 0 --head http://localhost:8080/healthcheck || exit 1
+      interval: 10s
+      retries: 3
+      start_period: 5s
+      timeout: 2s
 
   nginx:
     image: nginx:latest
@@ -54,7 +68,7 @@ services:
       resources:
         limits:
           cpus: '0.2'
-          memory: '300MB'
+          memory: '128MB'
     networks:
       - support-net
 
@@ -75,9 +89,15 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: '1.5GB'
+          memory: '1GB'
     networks:
       - support-net
+    healthcheck:
+      test: ["CMD", "mongo", "--quiet", "mongodb/rinha_backend", "--eval", "'quit(db.runCommand({ ping: 1 }).ok ? 0 : 2)'" ]
+      interval: 10s
+      retries: 3
+      start_period: 20s
+      timeout: 10s
 
 
 networks:
