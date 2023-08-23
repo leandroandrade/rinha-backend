@@ -62,7 +62,7 @@ autocannon -c 10 -p 10 -m POST -H "Content-Type:application/json" -i request.jso
 
 Construir imagem:
 ```sh
-docker build -t leandroandrade/rinha-backend-2023-q3 .
+docker build -t leandromandrade/rinha-backend-2023-q3 .
 ```
 
 ## Containers Dev
