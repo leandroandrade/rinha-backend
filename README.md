@@ -49,6 +49,15 @@ Finalizar containers:
 docker compose down -v
 ```
 
+## Load Test
+
+Criar pessoa:
+```sh
+autocannon -c 10 -p 10 -m POST -H "Content-Type:application/json" -i request.json http://127.0.0.1:3000/pessoas
+
+autocannon -c 10 -p 10 -m POST -H "Content-Type:application/json" -i request.json http://127.0.0.1:9999/pessoas
+```
+
 ## Imagem Docker
 
 Construir imagem:
