@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const { MongoServerError } = require('mongodb');
 
 class PostController {
   constructor(fastify) {
@@ -30,7 +31,7 @@ class PostController {
         .header('Location', `/pessoas/${id}`)
         .send({ id });
     } catch (err) {
-      if (err.code === 11000) {
+      if (err instanceof MongoServerError && err.code === 11000) {
         return reply.status(422)
           .send({
             statusCode: 422,
