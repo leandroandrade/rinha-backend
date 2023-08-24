@@ -322,3 +322,39 @@ test('should return error when `apelido` already exists', async (t) => {
     message: 'dev already exists!',
   });
 });
+
+test('should register only one with same `apelido`', async (t) => {
+  await Promise.all([
+    fastify.inject({
+      method: 'POST',
+      url: '/pessoas',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      payload: {
+        apelido: 'dev',
+        nome: 'Sample Dev',
+        nascimento: '2023-08-16',
+        stack: ['C#', 'Python'],
+      },
+    }),
+    fastify.inject({
+      method: 'POST',
+      url: '/pessoas',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      payload: {
+        apelido: 'dev',
+        nome: 'Sample Dev',
+        nascimento: '2023-08-16',
+        stack: ['C#', 'Python'],
+      },
+    }),
+  ]);
+
+  const collection = fastify.mongo.db.collection('pessoas');
+  const total = await collection.countDocuments();
+
+  t.equal(total, 1);
+});
