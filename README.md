@@ -69,12 +69,12 @@ docker build -t leandromandrade/rinha-backend-2023-q3 .
 
 Iniciar containers:
 ```sh
-docker compose -f docker-compose-dev.yml up --build -d
+docker compose -f docker-compose.yml up --build -d
 ```
 
 Finalizar containers:
 ```sh
-docker compose -f docker-compose-dev.yml down -v
+docker compose -f docker-compose.yml down -v
 ```
 
 ## Containers Produção

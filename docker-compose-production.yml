@@ -11,6 +11,10 @@ services:
       MONGODB_URL: 'mongodb://root:root@mongodb:27017/'
       MONGODB_DB: 'rinha_backend'
       NODE_ENV: production
+    ulimits:
+      nofile:
+        soft: 1000000
+        hard: 1000000
     deploy:
       resources:
         limits:
@@ -38,6 +42,10 @@ services:
       MONGODB_URL: 'mongodb://root:root@mongodb:27017/'
       MONGODB_DB: 'rinha_backend'
       NODE_ENV: production
+    ulimits:
+      nofile:
+        soft: 1000000
+        hard: 1000000
     deploy:
       resources:
         limits:
@@ -60,8 +68,10 @@ services:
     volumes:
       - ./ngnix/ngnix.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - api1
-      - api2
+      api1:
+        condition: service_healthy
+      api2:
+        condition: service_healthy
     ports:
       - '9999:9999'
     deploy:
