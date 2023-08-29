@@ -68,10 +68,8 @@ services:
     volumes:
       - ./ngnix/ngnix.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      api1:
-        condition: service_healthy
-      api2:
-        condition: service_healthy
+      - api1
+      - api2
     ports:
       - '9999:9999'
     deploy:
