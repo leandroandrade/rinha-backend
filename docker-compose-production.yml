@@ -10,7 +10,6 @@ services:
       PORT: 8080
       MONGODB_URL: 'mongodb://root:root@mongodb:27017/'
       MONGODB_DB: 'rinha_backend'
-      NODE_ENV: production
     ulimits:
       nofile:
         soft: 1000000
