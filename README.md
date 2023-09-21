@@ -89,6 +89,20 @@ Finalizar containers:
 docker compose -f docker-compose-production.yml down -v
 ```
 
+## Docker Hub
+
+Publicando imagem:
+```shell
+docker login
+```
+
+Enviando imagem:
+```shell
+docker push leandromandrade/rinha-backend-2023-q3
+```
+
+
+
 ## Miscellaneous
 
 Status de execução de query no MongoDB:
