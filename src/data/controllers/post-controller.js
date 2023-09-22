@@ -15,6 +15,15 @@ class PostController {
         stack,
       } = req.body;
 
+      if (!this.fastify.date.isDateValid(nascimento)) {
+        return reply.status(400)
+          .send({
+            statusCode: 400,
+            error: 'Bad Request',
+            message: 'nascimento is not a valid date',
+          });
+      }
+
       const pessoas = this.fastify.mongo.db.collection('pessoas');
       const id = crypto.randomUUID();
 

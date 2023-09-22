@@ -14,6 +14,8 @@ async function appPlugin(app, config) {
     },
   }).register(autoLoad, {
     dir: join(__dirname, 'routes'),
+  }).register(autoLoad, {
+    dir: join(__dirname, 'decorators'),
   });
 }
 

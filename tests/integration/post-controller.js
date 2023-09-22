@@ -358,3 +358,26 @@ test('should register only one with same `apelido`', async (t) => {
 
   t.equal(total, 1);
 });
+
+test('should return error then `nascimento` is invalid', async (t) => {
+  const response = await fastify.inject({
+    method: 'POST',
+    url: '/pessoas',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    payload: {
+      apelido: 'a',
+      nome: 'a',
+      nascimento: '2023-02-31',
+      stack: ['first', 'second'],
+    },
+  });
+
+  t.equal(response.statusCode, 400);
+  t.same(response.json(), {
+    statusCode: 400,
+    error: 'Bad Request',
+    message: 'nascimento is not a valid date',
+  });
+});
