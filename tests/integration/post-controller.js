@@ -359,7 +359,7 @@ test('should register only one with same `apelido`', async (t) => {
   t.equal(total, 1);
 });
 
-test('should return error then `nascimento` is invalid', async (t) => {
+test('should return error when `nascimento` is invalid', async (t) => {
   const response = await fastify.inject({
     method: 'POST',
     url: '/pessoas',
@@ -379,5 +379,51 @@ test('should return error then `nascimento` is invalid', async (t) => {
     statusCode: 400,
     error: 'Bad Request',
     message: 'nascimento is not a valid date',
+  });
+});
+
+test('should return an error when the stack has an element with length of more than 32 characters', async (t) => {
+  const response = await fastify.inject({
+    method: 'POST',
+    url: '/pessoas',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    payload: {
+      apelido: 'WJAj',
+      nome: 'ep',
+      nascimento: '2012-04-16',
+      stack: ['1111111111111111111111111111111111111111'],
+    },
+  });
+
+  t.equal(response.statusCode, 400);
+  t.same(response.json(), {
+    statusCode: 400,
+    error: 'Bad Request',
+    message: 'body/stack/0 must NOT have more than 32 characters',
+  });
+});
+
+test('should return an error when the stack has some element with length of more than 32 characters', async (t) => {
+  const response = await fastify.inject({
+    method: 'POST',
+    url: '/pessoas',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    payload: {
+      apelido: 'WJAj',
+      nome: 'ep',
+      nascimento: '2012-04-16',
+      stack: ['PHP', '1111111111111111111111111111111111111111'],
+    },
+  });
+
+  t.equal(response.statusCode, 400);
+  t.same(response.json(), {
+    statusCode: 400,
+    error: 'Bad Request',
+    message: 'body/stack/1 must NOT have more than 32 characters',
   });
 });

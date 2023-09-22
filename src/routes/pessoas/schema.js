@@ -28,6 +28,8 @@ const postPessoa = {
           type: 'array',
           items: {
             type: 'string',
+            minLength: 1,
+            maxLength: 32,
           },
         },
       },
